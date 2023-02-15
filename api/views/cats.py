@@ -30,7 +30,11 @@ def show(id):
   cat = Cat.query.filter_by(id=id).first()
   cat_data = cat.serialize()
   cat_data["fed"] = cat.fed_for_today()
-  return jsonify(cat=cat_data), 200
+
+  toys = Toy.query.filter(Toy.id.notin_([toy.id for toy in cat.toys])).all()
+  toys=[toy.serialize() for toy in toys]
+
+  return jsonify(cat=cat_data, available_toys=toys), 200
 
 @cats.route('/<id>', methods=["PUT"]) 
 @login_required

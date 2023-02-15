@@ -11,9 +11,19 @@ class Cat(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
 
+    feedings = db.relationship("Feeding", cascade='all')
+
     def __repr__(self):
       return f"Cat('{self.id}', '{self.name}'"
 
     def serialize(self):
       cat = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+      feedings = [feeding.serialize() for feeding in self.feedings]
+      cat['feedings'] = feedings
       return cat
+
+    def fed_for_today(self):
+      if len([f for f in self.feedings if f.is_recent_meal() == True]) >= 3:
+        return True
+      else:
+        return False

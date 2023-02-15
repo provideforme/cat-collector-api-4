@@ -27,6 +27,7 @@ def index():
 def show(id):
   cat = Cat.query.filter_by(id=id).first()
   cat_data = cat.serialize()
+  cat_data["fed"] = cat.fed_for_today()
   return jsonify(cat=cat_data), 200
 
 @cats.route('/<id>', methods=["PUT"]) 

@@ -17,7 +17,7 @@ def create():
   db.session.commit()
   return jsonify(cat.serialize()), 201
 
-  @cats.route('/', methods=["GET"])
-  def index():
-    cats = Cat.query.all()
-    return jsonify([cat.serialize() for cat in cats]), 200
+@cats.route('/', methods=["GET"])
+def index():
+  cats = Cat.query.all()
+  return jsonify([cat.serialize() for cat in cats]), 200

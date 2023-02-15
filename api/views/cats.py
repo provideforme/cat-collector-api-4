@@ -31,10 +31,11 @@ def show(id):
   cat_data = cat.serialize()
   cat_data["fed"] = cat.fed_for_today()
 
+  # Add the following:
   toys = Toy.query.filter(Toy.id.notin_([toy.id for toy in cat.toys])).all()
   toys=[toy.serialize() for toy in toys]
 
-  return jsonify(cat=cat_data, available_toys=toys), 200
+  return jsonify(cat=cat_data, available_toys=toys), 200 # <=== Include toys in response
 
 @cats.route('/<id>', methods=["PUT"]) 
 @login_required
@@ -102,5 +103,5 @@ def assoc_toy(cat_id, toy_id):
   db.session.add(assoc)
   db.session.commit()
 
-  cat = Cat.query.filter_by(id-cat_id).first()
+  cat = Cat.query.filter_by(id=cat_id).first()
   return jsonify(cat.serialize()), 201

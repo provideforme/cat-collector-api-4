@@ -27,3 +27,19 @@ def index():
 def show(id):
   toy = Toy.query.filter_by(id=id).first()
   return jsonify(toy.serialize()), 200
+
+@toys.route('/<id>', methods=["PUT"])
+@login_required
+def update(id):
+  data = request.get_json()
+  profile = read_token(request)
+  toy = Toy.query.filter_by(id=id).first()
+
+  if toy.profile_id != profile["id"]:
+    return 'Forbidden', 403
+
+  for key in data:
+    setattr(toy, key, data[key])
+
+  db.session.commit()
+  return jsonify(toy.serialize()), 200

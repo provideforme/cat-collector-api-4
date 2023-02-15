@@ -5,6 +5,7 @@ from api.models.db import db
 from config import Config
 
 # ============ Import Models ============
+from api.models.toy import Association
 from api.models.feeding import Feeding
 from api.models.toy import Toy
 from api.models.cat import Cat

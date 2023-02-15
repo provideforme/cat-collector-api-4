@@ -21,3 +21,9 @@ def create():
 def index():
   cats = Cat.query.all()
   return jsonify([cat.serialize() for cat in cats]), 200
+
+@cats.route('/<id>', methods=["GET"])
+def show(id):
+  cat = Cat.query.filter_by(id=id).first()
+  cat_data = cat.serialize()
+  return jsonify(cat=cat_data), 200
